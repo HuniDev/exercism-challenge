@@ -6,35 +6,36 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 function App() {
-	const [test, setTest] = useState('');
-	const [tracks, setTracks] = useState('');
-	const [isLoaded, setIsLoaded] = useState(false);
+	const [test, setTest] = useState([]);
 	const [error, setError] = useState(null);
-	const [totalRows, setTotalRows] = useState(0);
+	const [loading, setLoading] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(10);
 
-	useEffect(() => {
-		fetchData(1, perPage);
-	}, [perPage]);
-
-	const fetchData = async (page, per_page) => {
+	const fetchData = async () => {
 		Promise.all([
+			setLoading(true),
 			axios.get('https://exercism.org/api/v2/hiring/testimonials'),
 			axios.get('https://exercism.org/api/v2/tracks'),
 		])
-			.then(response => {
-				setTest(response[0].data.testimonials.results);
-				setTracks(response[1].data);
-				setTotalRows(response.total);
+			.then(res => {
+				const data = res[1].data.testimonials.results;
+				setTest(data);
+				setLoading(false);
 			})
 
 			.catch(error => {
 				console.log(error);
+				setError(error);
 			});
 	};
+
+	useEffect(() => {
+		fetchData();
+	}, []);
 	console.log(test);
 	return (
-		<div className='App'>
+		<div>
 			<Navbar />
 			<Head />
 			<Table />

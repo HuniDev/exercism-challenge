@@ -2,7 +2,7 @@ function Table() {
 	return (
 		<div className='overflow-x-auto w-full'>
 			<table className='table w-full'>
-				<thead>
+				<thead className='w-full'>
 					<tr>
 						<th>
 							<img src='#' alt='exercism-icon' />
@@ -13,6 +13,8 @@ function Table() {
 						<th>
 							<button>Sort by Most Recent</button>
 						</th>
+						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
